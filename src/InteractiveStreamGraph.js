@@ -48,7 +48,7 @@ class InteractiveStreamGraph extends Component {
     d3.select('.container').selectAll('path').data(stackedSeries).join('path').style('fill', d => colorScale(d.key)).attr('d', d=>areaGenerator(d))
       .on("mouseover", (event, d) => {
             //console.log("d:", d[0].data[d.key], "date?", d[0].data.Date)
-            tooltip.style("display", "block").style("left", event.pageX + "px").style("top", event.pageY + "px")
+            tooltip.style("display", "block").style("left", event.pageX + "px").style("top", event.pageY + "px").style("background-color", "white")
             //
 
             var xScale = d3.scaleTime().domain(d3.extent(chartData, d => d.Date)).range([0, innerWidth]);
@@ -81,7 +81,20 @@ class InteractiveStreamGraph extends Component {
 
     // Legend? This is hardcoded but i don't care its like less than an hour before it is due and my brain is too smooth to do something else
     // Im sorry to the grader, i was tired and stupid when I made this
-    var legs = d3.select(".leg").attr("transform", `translate(${415}, ${300})`)
+    var legs = d3.select(".leg").attr("transform", `translate(${415}, ${250})`)
+
+    legs.selectAll("rect").data(llmModels).join("rect")
+    .attr("height", "25")
+    .attr("width", "25")
+    .attr("y", (d,i) => i*30)
+    .attr("fill", (d,i) => colors[llmModels[i]])
+
+    legs.selectAll("text").data(llmModels).join("text")
+    .attr("x", 27)
+    .attr("y", (d,i) => i*30 + 17)
+    .text((d,i) => llmModels[i])
+    /*
+    the brainchild of my insanity
     legs.append("rect")
     .attr("height", "25")
     .attr("width", "25")
@@ -126,7 +139,7 @@ class InteractiveStreamGraph extends Component {
     legs.append("text")
     .text(llmModels[0])
     .attr("transform", `translate(${(27)}, ${20 + (20 * 5)})`)
-
+    */
   }
 
   render() {
